@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MSM Breeding Search</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 24px; max-width: 720px; margin: 0 auto; }
+    h1 { font-size: 20px; margin: 0 0 12px; }
+    .row { display: flex; gap: 8px; }
+    input { flex: 1; padding: 10px 12px; font-size: 16px; }
+    button { padding: 10px 14px; font-size: 16px; cursor: pointer; }
+    .suggestions { border: 1px solid #ddd; border-top: none; max-height: 240px; overflow: auto; display: none; }
+    .item { padding: 10px 12px; cursor: pointer; }
+    .item:hover, .item.active { background: #f2f2f2; }
+    .result { margin-top: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+    .muted { color: #666; font-size: 14px; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; border: 1px solid #ddd; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>MSM Breeding Search</h1>
+  <div class="muted">Type a monster name. Use <span class="kbd">↑</span>/<span class="kbd">↓</span> + <span class="kbd">Enter</span>.</div>
+
+  <div style="margin-top: 10px;">
+    <div class="row">
+      <input id="q" autocomplete="off" placeholder="Search monster (e.g., G'joob, Ghazt, Furcorn)..." />
+      <button id="go">Search</button>
+    </div>
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+
+  <div id="out" class="result" style="display:none;"></div>
+
+  <script>
+    // 1) Put your data here (monster -> breeding combo)
+    //    You can add hundreds; this approach still works fine.
+    const DATA = [
+        { name: "Dandidoo", combo: "Tweedle + Potbelly" },
+        { name: "Cybop", combo: "Tweedle + Noggin" },
+        { name: "Quibble", combo: "Tweedle + Toe Jammer" },
+        { name: "Pango", combo: "Tweedle + Mammott" },
+        { name: "Shrubb", combo: "Potbelly + Mammott" },
+        { name: "Oaktopus", combo: "Potbelly + Toe Jammer" },
+        { name: "Furcorn", combo: "Potbelly + Mammott" },
+        { name: "Fwog", combo: "Noggin + Toe Jammer" },
+        { name: "Drumpler", combo: "Noggin and Mammott" },
+        { name: "Maw", combo: "Toe Jammer + Mammott" },
+        { name: "Reedling", combo: "Dandidoo + Noggin" },
+        { name: "Spunge", combo: "Dandidoo + Toe Jammer" },
+        { name: "Thumpies", combo: "Dandidoo + Mammott" },
+        { name: "Scups", combo: "Noggin + Quibble" },
+        { name: "PomPom", combo: "Pango + Noggin" },
+        { name: "Congle", combo: "Pango + Toe Jammer" },
+        { name: "Pummel", combo: "Oaktopus + Noggin" },
+        { name: "Clamble", combo: "Furcorn + Noggin" },
+        { name: "Bowgart", combo: "Furcorn + Toe Jammer" },
+        { name: "T-Rox", combo: "Maw + Noggin" },
+        { name: "Shellbeat", combo: "Spunge + Noggin" },
+        { name: "Quarrister", combo: "Thumpies + Noggin" },
+        { name: "Deedge", combo: "Thumpies + Toe Jammer" },
+        { name: "Riff", combo: "Congle + Noggin" },
+        { name: "Entbrat", combo: "Bowgart + Noggin" },
+        { name: "Tring", combo: "Barrb + Noggin" },
+        { name: "Sneyser", combo: "Woolabee + Toe Jammer" },
+        { name: "Glowl", combo: "Kayna + Tweedle" },
+        { name: "Flowah", combo: "Kayna + Potbelly" },
+        { name: "Stogg", combo: "Kayna + Noggin" },
+        { name: "Phangler", combo: "Kayna + Toe Jammer" },
+        { name: "Boskus", combo: "Kayna + Mammott" },
+        { name: "Barrb", combo: "Glowl + Potbelly" },
+        { name: "Floogull", combo: "Glowl + Noggin" },
+        { name: "Whaddle", combo: "Glowl + Toe Jammer" },
+        { name: "Woolabee", combo: "Glowl + Mammott" },
+        { name: "Repatillo", combo: "Flowah + Noggin" },
+        { name: "Rootitoot", combo: "Flowah + Toe Jammer" },
+        { name: "Sooza", combo: "Flowah + Mammott" },
+        { name: "Thrumble", combo: "Phangler + Noggin" },
+        { name: "Ziggurab", combo: "Boskus + Noggin" },
+        { name: "Wynq", combo: "Boskus + Toe Jammer" },
+        { name: "Gloptic", combo: "Rooba + Toe Jammer" },
+        { name: "Blow't", combo: "TooToo + Mammott" },
+        { name: "Plinkajou", combo: "Banjaw + Noggin" },
+        { name: "Pladdie", combo: "Clavi Gnat + Noggin" },
+        { name: "Enchantling", combo: "Larvaluss + Fluoress" },
+        { name: "Bonkers", combo: "Potbelly + Theremind" },
+        { name: "Gob", combo: "Potbelly + Fluoress" },
+        { name: "Peckidna", combo: "Noggin + Clackula" },
+        { name: "HippityHop", combo: "Noggin + Floot Fly" },
+        { name: "Poppette", combo: "Toe Jammer + Theremind" },
+        { name: "Denchuhs", combo: "Toe Jammer + Clackula" },
+        { name: "Bulbo", combo: "Mammott + Fluoress" },
+        { name: "Squot", combo: "Mammott + Floot Fly" },
+        { name: "Yuggler", combo: "Kayna + Theremind" },
+        { name: "Hawlo", combo: "Kayna + Clackula" },
+        { name: "Pluckbill", combo: "Kayna + Fluoress" },
+        { name: "Wimmzies", combo: "Kayna + Floot Fly" },
+        { name: "Xyster", combo: "Theremind + Clackula" },
+        { name: "Cahoot", combo: "Theremind + Fluoress" },
+        { name: "Déjà-Jin", combo: "Theremind + Floot Fly" },
+        { name: "Roarick", combo: "Clackula + Fluoress" },
+        { name: "Osstax", combo: "Clackula + Floot Fly" },
+        { name: "Knucklehead", combo: "Fluoress + Floot Fly" },
+        { name: "Tapricorn", combo: "Bonkers + Toe Jammer" },
+        { name: "Spytrap", combo: "Gob + Mammott" },
+        { name: "Rooba", combo: "Yuggler + Potbelly" },
+        { name: "TooToo", combo: "Pluckbill + Potbelly" },
+        { name: "Withur", combo: "Denchuhs + Noggin" },
+        { name: "Cantorell", combo: "Squot + Noggin" },
+        { name: "Uuduk", combo: "Hawlo + Noggin" },
+        { name: "Bridg-it", combo: "Wimmzies + Noggin" },
+        { name: "Periscorp", combo: "Yuggler + Toe Jammer" },
+        { name: "Banjaw", combo: "Hawlo + Toe Jammer" },
+        { name: "Fiddlement", combo: "Pluckbill + Mammott" },
+        { name: "Clavi Gnat", combo: "Wimmzies + Mammott" },
+        { name: "G'day", combo: "Xyster + Fluoress" },
+        { name: "Larvaluss", combo: "Osstax + Theremind" },
+        { name: "Frondley", combo: "Déjà-Jin + Fluoress" },
+        { name: "Mushaboom", combo: "Osstax + Fluoress" },
+        { name: "Ghazt", combo: "Entbrat + T-Rox" },
+        { name: "Grumpyre", combo: "Deedge + Congle" },
+        { name: "Reebro", combo: "Riff + T-Rox" },
+        { name: "Jeeode", combo: "Shellbeat + Reedling" },
+        { name: "Humbug", combo: "Quarrister + Reedling" },
+        { name: "Whisp", combo: "Ghazt + Grumpyre" },
+        { name: "Nebulob", combo: "Ghazt + Reebro" },
+        { name: "Sox", combo: "Ghazt + Jeeode" },
+        { name: "Jellbilly", combo: "Ghazt + Humbug" },
+        { name: "Arackulele", combo: "Grumpyre + Reebro" },
+        { name: "Boodoo", combo: "Grumpyre + Jeeode" },
+        { name: "Kazilleon", combo: "Grumpyre + Humbug" },
+        { name: "Bellowfish", combo: "Reebro + Jeeode" },
+        { name: "Dragong", combo: "Reebro + Humbug" },
+        { name: "Fung Pray", combo: "Jeeode + Humbug" },
+        { name: "Punkleton", combo: "Bowgart + T-Rox" },
+        { name: "Yool", combo: "Thumpies + Congle" },
+        { name: "Schmoochle", combo: "Riff + Tweedle" },
+        { name: "Blabbit", combo: "Spunge + Scups" },
+        { name: "Hoola", combo: "PomPom + Pango" },
+        { name: "Gobbleygourd", combo: "Glowl + Kayna / Punkleton + Yool" },
+        { name: "Clavavera", combo: "Withur + Clackula / Punkleton + Schmoochle" },
+        { name: "Viveine", combo: "Shugabush + Oaktopus / Punkleton + Blabbit" },
+        { name: "Jam Boree", combo: "Punkleton + Hoola" },
+        { name: "Carillong", combo: "Mushaboom + Roarick / Yool + Schmoochle" },
+        { name: "Whiz-bang", combo: "Blow't + Spytrap / Yool + Blabbit" },
+        { name: "Monculus", combo: "Nebulob + Jeeode / Yool + Hoola" },
+        { name: "Ffidyll", combo: "Pladdie + Floot Fly / Schmoochle + Blabbit" },
+        { name: "Boo'qwurm", combo: "Periscorp + Bonkers / Schmoochle + Hoola" },
+        { name: "Spurrit", combo: "Wynq + Maw / Blabbit + Hoola" },
+        { name: "G'joob", combo: "Pummel + T-Rox" },
+        { name: "Strombonin", combo: "Spunge + Bowgart" },
+        { name: "Yawstrich", combo: "Scups + T-Rox" },
+        { name: "Anglow", combo: "Scups + Pummel" },
+        { name: "Hyehehe", combo: "Thumpies + PomPom" },
+        { name: "Buzzinga", combo: "Reedling + Barrb" },
+        { name: "Cherubble", combo: "Congle + Woolabee" },
+        { name: "Bleatnik", combo: "Cataliszt + G'joob" },
+        { name: "Cranchee", combo: "Cataliszt + Strombonin" },
+        { name: "Sporerow", combo: "Cataliszt + Yawstrich" },
+        { name: "Pinghound", combo: "Cataliszt + Anglow" },
+        { name: "Wheezel", combo: "Cataliszt + Hyehehe" },
+        { name: "Knurv", combo: "Cataliszt + Buzzinga" },
+        { name: "shLep", combo: "Cataliszt + Cherubble" },
+        { name: "Hairionette", combo: "Gloptic + Rooba" },
+        { name: "Owlesque", combo: "Pladdie + Bridg-it" },
+        { name: "Arcorina", combo: "Plinkajou + Withur" },
+        { name: "Shhimmer", combo: "Blow't + Spytrap" },
+        { name: "Scallyrags", combo: "Hairionette + Owlesque" },
+        { name: "eRmA gUrDy", combo: "Hairionette + Shhimmer" },
+        { name: "Dakktyl", combo: "Owlesque + Arcorina" },
+        { name: "Jerm", combo: "Dakktyl + Hairionette" },
+        { name: "Illost", combo: "Dakktyl + Shhimmer" },
+        { name: "Shugabush", combo: "Clamble + Bowgart" },
+        { name: "Shugabass", combo: "Shugabush + Potbelly" },
+        { name: "Shugitar", combo: "Shugabush + PomPom" },
+        { name: "Shugajo", combo: "Shugabush + Oaktopus" },
+        { name: "Shugarock", combo: "Shugabush + Mammott" },
+        { name: "Shugabuzz", combo: "Shugabush + Quibble" },
+        { name: "Shugabeats", combo: "Shugabush + Furcorn" },
+        { name: "Shugavox", combo: "Shugabush + Deedge" },
+        { name: "bbli$zard", combo: "Thumpies + Congle" },
+        { name: "Furcorn", combo: "Mammott + Potbelly" },
+        { name: "G'joob", combo: "T-Rox + Pummel (example)" },
+        { name: "Ghazt", combo: "Entbrat + any 3-element (example)" },
+    ];
+
+    // --- "Smart search" helpers ---
+    function normalize(s) {
+      return (s || "")
+        .toLowerCase()
+        .replace(/['’`]/g, "")       // remove apostrophes
+        .replace(/[^a-z0-9]+/g, " ") // punctuation -> space
+        .trim();
+    }
+
+    // Levenshtein distance (typo tolerance)
+    function levenshtein(a, b) {
+      a = normalize(a);
+      b = normalize(b);
+      const m = a.length, n = b.length;
+      if (!m) return n;
+      if (!n) return m;
+      const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+      for (let i = 0; i <= m; i++) dp[i][0] = i;
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + cost
+          );
+        }
+      }
+      return dp[m][n];
+    }
+
+    function scoreMatch(query, itemName) {
+      const q = normalize(query);
+      const name = normalize(itemName);
+      if (!q) return Infinity;
+
+      // best: startsWith
+      if (name.startsWith(q)) return 0;
+
+      // next: contains
+      if (name.includes(q)) return 1;
+
+      // else: typo tolerance (smaller distance = better)
+      // cap the cost so super-wrong strings don't dominate
+      return 2 + Math.min(levenshtein(q, name), 50);
+    }
+
+    // --- UI logic ---
+    const qEl = document.getElementById("q");
+    const sugEl = document.getElementById("suggestions");
+    const outEl = document.getElementById("out");
+    const goEl = document.getElementById("go");
+
+    let currentSuggestions = [];
+    let activeIndex = -1;
+
+    function renderSuggestions(list) {
+      sugEl.innerHTML = "";
+      activeIndex = -1;
+
+      if (list.length === 0) {
+        sugEl.style.display = "none";
+        return;
+      }
+      sugEl.style.display = "block";
+
+      list.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.textContent = item.name;
+        div.addEventListener("mousedown", (e) => {
+          // mousedown (not click) so it works before input loses focus
+          e.preventDefault();
+          selectSuggestion(idx);
+        });
+        sugEl.appendChild(div);
+      });
+    }
+
+    function setActive(idx) {
+      const items = Array.from(sugEl.querySelectorAll(".item"));
+      items.forEach(el => el.classList.remove("active"));
+      if (idx >= 0 && idx < items.length) {
+        items[idx].classList.add("active");
+        activeIndex = idx;
+      }
+    }
+
+    function selectSuggestion(idx) {
+      const item = currentSuggestions[idx];
+      if (!item) return;
+      qEl.value = item.name;
+      sugEl.style.display = "none";
+      showResult(item.name);
+    }
+
+    function getBestMatches(query, limit = 8) {
+      const q = normalize(query);
+      if (!q) return [];
+
+      // rank by score
+      const ranked = DATA
+        .map(item => ({ item, score: scoreMatch(q, item.name) }))
+        .sort((a, b) => a.score - b.score)
+        .slice(0, limit)
+        .map(x => x.item);
+
+      // optionally, hide suggestions if even the best match is too far
+      // (prevents weird results when typing nonsense)
+      const bestScore = ranked.length ? scoreMatch(q, ranked[0].name) : Infinity;
+      if (bestScore > 10) return []; // tweak threshold as you like
+      return ranked;
+    }
+
+    function showResult(queryName) {
+      const q = normalize(queryName);
+
+      // try exact normalized match first
+      let exact = DATA.find(x => normalize(x.name) === q);
+
+      // if not exact, take best match (smart search)
+      if (!exact) {
+        const best = getBestMatches(queryName, 1)[0];
+        exact = best || null;
+      }
+
+      if (!exact) {
+        outEl.style.display = "block";
+        outEl.textContent = "No monster found. Try a different spelling.";
+        return;
+      }
+
+      outEl.style.display = "block";
+      outEl.innerHTML = `<strong>${exact.name}</strong><div style="margin-top:8px;">${exact.combo}</div>`;
+    }
+
+    qEl.addEventListener("input", () => {
+      const list = getBestMatches(qEl.value, 8);
+      currentSuggestions = list;
+      renderSuggestions(list);
+    });
+
+    qEl.addEventListener("keydown", (e) => {
+      const items = currentSuggestions;
+      if (sugEl.style.display === "block" && items.length) {
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setActive(Math.min(activeIndex + 1, items.length - 1));
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          setActive(Math.max(activeIndex - 1, 0));
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (activeIndex >= 0) selectSuggestion(activeIndex);
+          else showResult(qEl.value);
+        } else if (e.key === "Escape") {
+          sugEl.style.display = "none";
+        }
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        showResult(qEl.value);
+      }
+    });
+
+    goEl.addEventListener("click", () => showResult(qEl.value));
+
+    document.addEventListener("click", (e) => {
+      // close suggestions if clicking outside
+      if (!sugEl.contains(e.target) && e.target !== qEl) {
+        sugEl.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
