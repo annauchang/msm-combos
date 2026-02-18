@@ -12,11 +12,13 @@
       margin: 0;
       padding: 0;
       background: #5C3A21; /* true outside/background (notch area) */
+      height: 100%;
     }
 
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: #3b2f2f;
+      overscroll-behavior: none;
     }
 
     /* 🍫 Pudding Header */
@@ -171,8 +173,8 @@
 
     .page {
       background: #FFF6C9;     /* the yellow sheet */
-      min-height: 100svh;      /* fills phone screen reliably */
       min-height: 100dvh;      /* fallback for newer browsers */
+      min-height: 100vh;                 /* fallback */
     }     
 
   </style>
