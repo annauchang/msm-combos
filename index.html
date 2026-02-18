@@ -131,6 +131,38 @@
       font-weight: 700;     /* bold */
       margin-bottom: 16px;  /* spacing below */
     }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .result-text {
+      flex: 1;
+    }
+
+    .monster-img {
+      width: 200px;   
+      height: auto;
+      border-radius: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .result-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .monster-img {
+        width: 160px;
+        margin-top: 12px;
+      }
+    }
+
   </style>
 </head>
 
@@ -171,7 +203,7 @@
 
     <div id="out" class="result"></div>
   </div>
-
+ 
 <script>
   const DATA = [
     { name: "Dandidoo", combo: "Tweedle + Potbelly", img: "images/dandidoo.png", standard: 480 },
@@ -468,10 +500,15 @@
     outEl.innerHTML = `
       <div class="monster-name">${exact.name}</div>
 
-      <div class="info-line">🧬 <strong>Combo:</strong> ${exact.combo || "—"}</div>
-      <div class="info-line">🩷 <strong>Standard:</strong> ${formatTime(exact.standard)}</div>
-      <div class="info-line">💛 <strong>Enhanced:</strong> ${formatTime(calculateEnhanced(exact.standard))}</div>
+      <div class="result-row">
+        <div class="result-text">
+          <div class="info-line">🧬 <strong>Combo:</strong> ${exact.combo}</div>
+          <div class="info-line">🩷 <strong>Standard:</strong> ${formatTime(exact.standard)}</div>
+          <div class="info-line">💛 <strong>Enhanced:</strong> ${formatTime(calculateEnhanced(exact.standard))}</div>
+        </div>
 
+        <img src="${exact.img}" alt="${exact.name}" class="monster-img" />
+      </div>
     `;
   }
 
