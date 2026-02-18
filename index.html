@@ -4,39 +4,166 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MSM Breeding Search</title>
+  <link href="https://fonts.googleapis.com/css2?family=Delius+Unicase:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 24px; max-width: 720px; margin: 0 auto; }
-    h1 { font-size: 20px; margin: 0 0 12px; }
-    .row { display: flex; gap: 8px; }
-    input { flex: 1; padding: 10px 12px; font-size: 16px; }
-    button { padding: 10px 14px; font-size: 16px; cursor: pointer; }
-    .suggestions { border: 1px solid #ddd; border-top: none; max-height: 240px; overflow: auto; display: none; }
-    .item { padding: 10px 12px; cursor: pointer; }
-    .item:hover, .item.active { background: #f2f2f2; }
-    .result { margin-top: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
-    .muted { color: #666; font-size: 14px; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; border: 1px solid #ddd; padding: 2px 6px; border-radius: 6px; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin: 0;
+      background: #FFF6C9; /* pastel yellow */
+      color: #3b2f2f;
+    }
+
+    /* 🍫 Pudding Header */
+    .pudding-header {
+      background: #5C3A21; /* chocolate brown */
+      color: white;
+      text-align: center;
+      padding: 80px 20px 140px 20px;
+      position: relative;
+    }
+
+    .pudding-header h1 {
+      margin: 0;
+      font-size: 26px;
+      z-index: 2;
+      position: relative;
+      font-family: 'Delius Unicase', cursive;
+    }
+
+    /* SVG wave container */
+    .wave {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      line-height: 0;
+    }
+
+    .wave svg {
+      display: block;
+      width: 100%;
+      height: 80px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 16px;
+      font-size: 16px;
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    button {
+      padding: 16px 20px;
+      font-size: 16px;
+      border-radius: 16px;
+      border: none;
+      background: #8B5E3C;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      background: #73492d;
+      transform: translateY(-1px);
+    }
+
+    .suggestions {
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      display: none;
+    }
+
+    .item {
+      padding: 14px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .item:hover,
+    .item.active {
+      background: #FFF2B2;
+    }
+
+    .result {
+      margin-top: 24px;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      display: none;
+      animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.98); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .muted {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
-<body>
-  <h1>MSM Breeding Search</h1>
-  <div class="muted">Type a monster name. Use <span class="kbd">↑</span>/<span class="kbd">↓</span> + <span class="kbd">Enter</span>.</div>
 
-  <div style="margin-top: 10px;">
+<body>
+
+  <div class="pudding-header">
+    <h1>MSM Breeding Combos</h1>
+
+    <!-- REAL WAVY EDGE -->
+    <div class="wave">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="
+          M0,60
+          C50,110 100,110 150,60
+          C200,10 250,10 300,60
+          C350,110 400,110 450,60
+          C500,10 550,10 600,60
+          C650,110 700,110 750,60
+          C800,10 850,10 900,60
+          C950,110 1000,110 1050,60
+          C1100,10 1150,10 1200,60
+          L1200,120 L0,120 Z"
+          fill="#FFF6C9">
+        </path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="muted">Type a monster name. Use ↑ ↓ + Enter.</div>
+
     <div class="row">
       <input id="q" autocomplete="off" placeholder="Search monster (e.g., G'joob, Ghazt, Furcorn)..." />
       <button id="go">Search</button>
     </div>
+
     <div id="suggestions" class="suggestions"></div>
+
+    <div id="out" class="result"></div>
   </div>
 
-  <div id="out" class="result" style="display:none;"></div>
-
-  <script>
-    // 1) Put your data here (monster -> breeding combo)
-    //    You can add hundreds; this approach still works fine.
-    const DATA = [
-        { name: "Dandidoo", combo: "Tweedle + Potbelly" },
+<script>
+  const DATA = [
+  { name: "Dandidoo", combo: "Tweedle + Potbelly" },
         { name: "Cybop", combo: "Tweedle + Noggin" },
         { name: "Quibble", combo: "Tweedle + Toe Jammer" },
         { name: "Pango", combo: "Tweedle + Mammott" },
@@ -179,184 +306,154 @@
         { name: "Shugabeats", combo: "Shugabush + Furcorn" },
         { name: "Shugavox", combo: "Shugabush + Deedge" },
         { name: "bbli$zard", combo: "Thumpies + Congle" },
-        { name: "Furcorn", combo: "Mammott + Potbelly" },
-        { name: "G'joob", combo: "T-Rox + Pummel (example)" },
-        { name: "Ghazt", combo: "Entbrat + any 3-element (example)" },
-    ];
+  ];
 
-    // --- "Smart search" helpers ---
-    function normalize(s) {
-      return (s || "")
-        .toLowerCase()
-        .replace(/['’`]/g, "")       // remove apostrophes
-        .replace(/[^a-z0-9]+/g, " ") // punctuation -> space
-        .trim();
-    }
+  function normalize(s) {
+    return (s || "")
+      .toLowerCase()
+      .replace(/['’`]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
 
-    // Levenshtein distance (typo tolerance)
-    function levenshtein(a, b) {
-      a = normalize(a);
-      b = normalize(b);
-      const m = a.length, n = b.length;
-      if (!m) return n;
-      if (!n) return m;
-      const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
-      for (let i = 0; i <= m; i++) dp[i][0] = i;
-      for (let j = 0; j <= n; j++) dp[0][j] = j;
-      for (let i = 1; i <= m; i++) {
-        for (let j = 1; j <= n; j++) {
-          const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-          dp[i][j] = Math.min(
-            dp[i - 1][j] + 1,
-            dp[i][j - 1] + 1,
-            dp[i - 1][j - 1] + cost
-          );
-        }
-      }
-      return dp[m][n];
-    }
-
-    function scoreMatch(query, itemName) {
-      const q = normalize(query);
-      const name = normalize(itemName);
-      if (!q) return Infinity;
-
-      // best: startsWith
-      if (name.startsWith(q)) return 0;
-
-      // next: contains
-      if (name.includes(q)) return 1;
-
-      // else: typo tolerance (smaller distance = better)
-      // cap the cost so super-wrong strings don't dominate
-      return 2 + Math.min(levenshtein(q, name), 50);
-    }
-
-    // --- UI logic ---
-    const qEl = document.getElementById("q");
-    const sugEl = document.getElementById("suggestions");
-    const outEl = document.getElementById("out");
-    const goEl = document.getElementById("go");
-
-    let currentSuggestions = [];
-    let activeIndex = -1;
-
-    function renderSuggestions(list) {
-      sugEl.innerHTML = "";
-      activeIndex = -1;
-
-      if (list.length === 0) {
-        sugEl.style.display = "none";
-        return;
-      }
-      sugEl.style.display = "block";
-
-      list.forEach((item, idx) => {
-        const div = document.createElement("div");
-        div.className = "item";
-        div.textContent = item.name;
-        div.addEventListener("mousedown", (e) => {
-          // mousedown (not click) so it works before input loses focus
-          e.preventDefault();
-          selectSuggestion(idx);
-        });
-        sugEl.appendChild(div);
-      });
-    }
-
-    function setActive(idx) {
-      const items = Array.from(sugEl.querySelectorAll(".item"));
-      items.forEach(el => el.classList.remove("active"));
-      if (idx >= 0 && idx < items.length) {
-        items[idx].classList.add("active");
-        activeIndex = idx;
+  function levenshtein(a, b) {
+    a = normalize(a);
+    b = normalize(b);
+    const m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + cost
+        );
       }
     }
+    return dp[m][n];
+  }
 
-    function selectSuggestion(idx) {
-      const item = currentSuggestions[idx];
-      if (!item) return;
-      qEl.value = item.name;
+  function scoreMatch(query, itemName) {
+    const q = normalize(query);
+    const name = normalize(itemName);
+    if (!q) return Infinity;
+    if (name.startsWith(q)) return 0;
+    if (name.includes(q)) return 1;
+    return 2 + Math.min(levenshtein(q, name), 50);
+  }
+
+  const qEl = document.getElementById("q");
+  const sugEl = document.getElementById("suggestions");
+  const outEl = document.getElementById("out");
+  const goEl = document.getElementById("go");
+
+  let currentSuggestions = [];
+  let activeIndex = -1;
+
+  function renderSuggestions(list) {
+    sugEl.innerHTML = "";
+    activeIndex = -1;
+    if (!list.length) {
       sugEl.style.display = "none";
-      showResult(item.name);
+      return;
     }
-
-    function getBestMatches(query, limit = 8) {
-      const q = normalize(query);
-      if (!q) return [];
-
-      // rank by score
-      const ranked = DATA
-        .map(item => ({ item, score: scoreMatch(q, item.name) }))
-        .sort((a, b) => a.score - b.score)
-        .slice(0, limit)
-        .map(x => x.item);
-
-      // optionally, hide suggestions if even the best match is too far
-      // (prevents weird results when typing nonsense)
-      const bestScore = ranked.length ? scoreMatch(q, ranked[0].name) : Infinity;
-      if (bestScore > 10) return []; // tweak threshold as you like
-      return ranked;
-    }
-
-    function showResult(queryName) {
-      const q = normalize(queryName);
-
-      // try exact normalized match first
-      let exact = DATA.find(x => normalize(x.name) === q);
-
-      // if not exact, take best match (smart search)
-      if (!exact) {
-        const best = getBestMatches(queryName, 1)[0];
-        exact = best || null;
-      }
-
-      if (!exact) {
-        outEl.style.display = "block";
-        outEl.textContent = "No monster found. Try a different spelling.";
-        return;
-      }
-
-      outEl.style.display = "block";
-      outEl.innerHTML = `<strong>${exact.name}</strong><div style="margin-top:8px;">${exact.combo}</div>`;
-    }
-
-    qEl.addEventListener("input", () => {
-      const list = getBestMatches(qEl.value, 8);
-      currentSuggestions = list;
-      renderSuggestions(list);
+    sugEl.style.display = "block";
+    list.forEach((item, idx) => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.textContent = item.name;
+      div.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        selectSuggestion(idx);
+      });
+      sugEl.appendChild(div);
     });
+  }
 
-    qEl.addEventListener("keydown", (e) => {
-      const items = currentSuggestions;
-      if (sugEl.style.display === "block" && items.length) {
-        if (e.key === "ArrowDown") {
-          e.preventDefault();
-          setActive(Math.min(activeIndex + 1, items.length - 1));
-        } else if (e.key === "ArrowUp") {
-          e.preventDefault();
-          setActive(Math.max(activeIndex - 1, 0));
-        } else if (e.key === "Enter") {
-          e.preventDefault();
-          if (activeIndex >= 0) selectSuggestion(activeIndex);
-          else showResult(qEl.value);
-        } else if (e.key === "Escape") {
-          sugEl.style.display = "none";
-        }
+  function setActive(idx) {
+    const items = Array.from(sugEl.querySelectorAll(".item"));
+    items.forEach(el => el.classList.remove("active"));
+    if (idx >= 0 && idx < items.length) {
+      items[idx].classList.add("active");
+      activeIndex = idx;
+    }
+  }
+
+  function selectSuggestion(idx) {
+    const item = currentSuggestions[idx];
+    if (!item) return;
+    qEl.value = item.name;
+    sugEl.style.display = "none";
+    showResult(item.name);
+  }
+
+  function getBestMatches(query, limit = 8) {
+    const q = normalize(query);
+    if (!q) return [];
+    const ranked = DATA
+      .map(item => ({ item, score: scoreMatch(q, item.name) }))
+      .sort((a, b) => a.score - b.score)
+      .slice(0, limit)
+      .map(x => x.item);
+    const bestScore = ranked.length ? scoreMatch(q, ranked[0].name) : Infinity;
+    if (bestScore > 10) return [];
+    return ranked;
+  }
+
+  function showResult(queryName) {
+    const q = normalize(queryName);
+    let exact = DATA.find(x => normalize(x.name) === q);
+    if (!exact) {
+      exact = getBestMatches(queryName, 1)[0] || null;
+    }
+    outEl.style.display = "block";
+    if (!exact) {
+      outEl.textContent = "No monster found. Try a different spelling.";
+      return;
+    }
+    outEl.innerHTML = `
+      <strong style="font-size:18px;">${exact.name}</strong>
+      <div style="margin-top:10px;">${exact.combo}</div>
+    `;
+  }
+
+  qEl.addEventListener("input", () => {
+    currentSuggestions = getBestMatches(qEl.value, 8);
+    renderSuggestions(currentSuggestions);
+  });
+
+  qEl.addEventListener("keydown", (e) => {
+    if (sugEl.style.display === "block" && currentSuggestions.length) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setActive(Math.min(activeIndex + 1, currentSuggestions.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setActive(Math.max(activeIndex - 1, 0));
       } else if (e.key === "Enter") {
         e.preventDefault();
-        showResult(qEl.value);
+        if (activeIndex >= 0) selectSuggestion(activeIndex);
+        else showResult(qEl.value);
       }
-    });
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      showResult(qEl.value);
+    }
+  });
 
-    goEl.addEventListener("click", () => showResult(qEl.value));
+  goEl.addEventListener("click", () => showResult(qEl.value));
 
-    document.addEventListener("click", (e) => {
-      // close suggestions if clicking outside
-      if (!sugEl.contains(e.target) && e.target !== qEl) {
-        sugEl.style.display = "none";
-      }
-    });
-  </script>
+  document.addEventListener("click", (e) => {
+    if (!sugEl.contains(e.target) && e.target !== qEl) {
+      sugEl.style.display = "none";
+    }
+  });
+</script>
+
 </body>
 </html>
