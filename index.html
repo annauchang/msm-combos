@@ -8,16 +8,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Delius+Unicase:wght@400;700&display=swap" rel="stylesheet">
   <style>
 
-    html {
-      background: #5C3A21;
-    }
-
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       margin: 0;
       background: #FFF6C9;
       color: #3b2f2f;
-      min-height: 100vh;
+      min-height: 100dvh;
     }
 
     /* 🍫 Pudding Header */
@@ -170,10 +166,24 @@
       }
     }
 
+    .statusbar-fill {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: env(safe-area-inset-top);
+      background: #5C3A21;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
   </style>
 </head>
 
 <body>
+
+  <div class="statusbar-fill"></div>
+
 
   <div class="pudding-header">
     <h1>MSM Breeding Combos</h1>
