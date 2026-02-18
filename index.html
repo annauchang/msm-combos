@@ -8,12 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Delius+Unicase:wght@400;700&display=swap" rel="stylesheet">
   <style>
 
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #5C3A21; /* true outside/background (notch area) */
+    }
+
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      margin: 0;
-      background: #FFF6C9;
       color: #3b2f2f;
-      min-height: 100dvh;
     }
 
     /* 🍫 Pudding Header */
@@ -166,59 +169,54 @@
       }
     }
 
-    .statusbar-fill {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: env(safe-area-inset-top);
-      background: #5C3A21;
-      z-index: 9999;
-      pointer-events: none;
-    }
+    .page {
+      background: #FFF6C9;     /* the yellow sheet */
+      min-height: 100svh;      /* fills phone screen reliably */
+      min-height: 100dvh;      /* fallback for newer browsers */
+    }     
 
   </style>
 </head>
 
 <body>
 
-  <div class="statusbar-fill"></div>
+  <div class="page">
 
+    <div class="pudding-header">
+      <h1>MSM Breeding Combos</h1>
 
-  <div class="pudding-header">
-    <h1>MSM Breeding Combos</h1>
-
-    <!-- REAL WAVY EDGE -->
-    <div class="wave">
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="
-          M0,60
-          C50,110 100,110 150,60
-          C200,10 250,10 300,60
-          C350,110 400,110 450,60
-          C500,10 550,10 600,60
-          C650,110 700,110 750,60
-          C800,10 850,10 900,60
-          C950,110 1000,110 1050,60
-          C1100,10 1150,10 1200,60
-          L1200,120 L0,120 Z"
-          fill="#FFF6C9">
-        </path>
-      </svg>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="muted">Type a monster name. Use ↑ ↓ + Enter.</div>
-
-    <div class="row">
-      <input id="q" autocomplete="off" placeholder="Search monster (e.g., G'joob, Ghazt, Furcorn)..." />
-      <button id="go">Search</button>
+      <!-- REAL WAVY EDGE -->
+      <div class="wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="
+            M0,60
+            C50,110 100,110 150,60
+            C200,10 250,10 300,60
+            C350,110 400,110 450,60
+            C500,10 550,10 600,60
+            C650,110 700,110 750,60
+            C800,10 850,10 900,60
+            C950,110 1000,110 1050,60
+            C1100,10 1150,10 1200,60
+            L1200,120 L0,120 Z"
+            fill="#FFF6C9">
+          </path>
+        </svg>
+      </div>
     </div>
 
-    <div id="suggestions" class="suggestions"></div>
+    <div class="container">
+      <div class="muted">Type a monster name. Use ↑ ↓ + Enter.</div>
 
-    <div id="out" class="result"></div>
+      <div class="row">
+        <input id="q" autocomplete="off" placeholder="Search monster (e.g., G'joob, Ghazt, Furcorn)..." />
+        <button id="go">Search</button>
+      </div>
+
+      <div id="suggestions" class="suggestions"></div>
+
+      <div id="out" class="result"></div>
+    </div>
   </div>
  
 <script>
