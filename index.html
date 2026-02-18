@@ -120,6 +120,13 @@
       opacity: 0.7;
       margin-bottom: 8px;
     }
+
+    .monster-name {
+      text-align: center;
+      font-size: 28px;      /* make it bigger */
+      font-weight: 700;     /* bold */
+      margin-bottom: 16px;  /* spacing below */
+    }
   </style>
 </head>
 
@@ -163,149 +170,160 @@
 
 <script>
   const DATA = [
-  { name: "Dandidoo", combo: "Tweedle + Potbelly" },
-        { name: "Cybop", combo: "Tweedle + Noggin" },
-        { name: "Quibble", combo: "Tweedle + Toe Jammer" },
-        { name: "Pango", combo: "Tweedle + Mammott" },
-        { name: "Shrubb", combo: "Potbelly + Mammott" },
-        { name: "Oaktopus", combo: "Potbelly + Toe Jammer" },
-        { name: "Furcorn", combo: "Potbelly + Mammott" },
-        { name: "Fwog", combo: "Noggin + Toe Jammer" },
-        { name: "Drumpler", combo: "Noggin and Mammott" },
-        { name: "Maw", combo: "Toe Jammer + Mammott" },
-        { name: "Reedling", combo: "Dandidoo + Noggin" },
-        { name: "Spunge", combo: "Dandidoo + Toe Jammer" },
-        { name: "Thumpies", combo: "Dandidoo + Mammott" },
-        { name: "Scups", combo: "Noggin + Quibble" },
-        { name: "PomPom", combo: "Pango + Noggin" },
-        { name: "Congle", combo: "Pango + Toe Jammer" },
-        { name: "Pummel", combo: "Oaktopus + Noggin" },
-        { name: "Clamble", combo: "Furcorn + Noggin" },
-        { name: "Bowgart", combo: "Furcorn + Toe Jammer" },
-        { name: "T-Rox", combo: "Maw + Noggin" },
-        { name: "Shellbeat", combo: "Spunge + Noggin" },
-        { name: "Quarrister", combo: "Thumpies + Noggin" },
-        { name: "Deedge", combo: "Thumpies + Toe Jammer" },
-        { name: "Riff", combo: "Congle + Noggin" },
-        { name: "Entbrat", combo: "Bowgart + Noggin" },
-        { name: "Tring", combo: "Barrb + Noggin" },
-        { name: "Sneyser", combo: "Woolabee + Toe Jammer" },
-        { name: "Glowl", combo: "Kayna + Tweedle" },
-        { name: "Flowah", combo: "Kayna + Potbelly" },
-        { name: "Stogg", combo: "Kayna + Noggin" },
-        { name: "Phangler", combo: "Kayna + Toe Jammer" },
-        { name: "Boskus", combo: "Kayna + Mammott" },
-        { name: "Barrb", combo: "Glowl + Potbelly" },
-        { name: "Floogull", combo: "Glowl + Noggin" },
-        { name: "Whaddle", combo: "Glowl + Toe Jammer" },
-        { name: "Woolabee", combo: "Glowl + Mammott" },
-        { name: "Repatillo", combo: "Flowah + Noggin" },
-        { name: "Rootitoot", combo: "Flowah + Toe Jammer" },
-        { name: "Sooza", combo: "Flowah + Mammott" },
-        { name: "Thrumble", combo: "Phangler + Noggin" },
-        { name: "Ziggurab", combo: "Boskus + Noggin" },
-        { name: "Wynq", combo: "Boskus + Toe Jammer" },
-        { name: "Gloptic", combo: "Rooba + Toe Jammer" },
-        { name: "Blow't", combo: "TooToo + Mammott" },
-        { name: "Plinkajou", combo: "Banjaw + Noggin" },
-        { name: "Pladdie", combo: "Clavi Gnat + Noggin" },
-        { name: "Enchantling", combo: "Larvaluss + Fluoress" },
-        { name: "Bonkers", combo: "Potbelly + Theremind" },
-        { name: "Gob", combo: "Potbelly + Fluoress" },
-        { name: "Peckidna", combo: "Noggin + Clackula" },
-        { name: "HippityHop", combo: "Noggin + Floot Fly" },
-        { name: "Poppette", combo: "Toe Jammer + Theremind" },
-        { name: "Denchuhs", combo: "Toe Jammer + Clackula" },
-        { name: "Bulbo", combo: "Mammott + Fluoress" },
-        { name: "Squot", combo: "Mammott + Floot Fly" },
-        { name: "Yuggler", combo: "Kayna + Theremind" },
-        { name: "Hawlo", combo: "Kayna + Clackula" },
-        { name: "Pluckbill", combo: "Kayna + Fluoress" },
-        { name: "Wimmzies", combo: "Kayna + Floot Fly" },
-        { name: "Xyster", combo: "Theremind + Clackula" },
-        { name: "Cahoot", combo: "Theremind + Fluoress" },
-        { name: "Déjà-Jin", combo: "Theremind + Floot Fly" },
-        { name: "Roarick", combo: "Clackula + Fluoress" },
-        { name: "Osstax", combo: "Clackula + Floot Fly" },
-        { name: "Knucklehead", combo: "Fluoress + Floot Fly" },
-        { name: "Tapricorn", combo: "Bonkers + Toe Jammer" },
-        { name: "Spytrap", combo: "Gob + Mammott" },
-        { name: "Rooba", combo: "Yuggler + Potbelly" },
-        { name: "TooToo", combo: "Pluckbill + Potbelly" },
-        { name: "Withur", combo: "Denchuhs + Noggin" },
-        { name: "Cantorell", combo: "Squot + Noggin" },
-        { name: "Uuduk", combo: "Hawlo + Noggin" },
-        { name: "Bridg-it", combo: "Wimmzies + Noggin" },
-        { name: "Periscorp", combo: "Yuggler + Toe Jammer" },
-        { name: "Banjaw", combo: "Hawlo + Toe Jammer" },
-        { name: "Fiddlement", combo: "Pluckbill + Mammott" },
-        { name: "Clavi Gnat", combo: "Wimmzies + Mammott" },
-        { name: "G'day", combo: "Xyster + Fluoress" },
-        { name: "Larvaluss", combo: "Osstax + Theremind" },
-        { name: "Frondley", combo: "Déjà-Jin + Fluoress" },
-        { name: "Mushaboom", combo: "Osstax + Fluoress" },
-        { name: "Ghazt", combo: "Entbrat + T-Rox" },
-        { name: "Grumpyre", combo: "Deedge + Congle" },
-        { name: "Reebro", combo: "Riff + T-Rox" },
-        { name: "Jeeode", combo: "Shellbeat + Reedling" },
-        { name: "Humbug", combo: "Quarrister + Reedling" },
-        { name: "Whisp", combo: "Ghazt + Grumpyre" },
-        { name: "Nebulob", combo: "Ghazt + Reebro" },
-        { name: "Sox", combo: "Ghazt + Jeeode" },
-        { name: "Jellbilly", combo: "Ghazt + Humbug" },
-        { name: "Arackulele", combo: "Grumpyre + Reebro" },
-        { name: "Boodoo", combo: "Grumpyre + Jeeode" },
-        { name: "Kazilleon", combo: "Grumpyre + Humbug" },
-        { name: "Bellowfish", combo: "Reebro + Jeeode" },
-        { name: "Dragong", combo: "Reebro + Humbug" },
-        { name: "Fung Pray", combo: "Jeeode + Humbug" },
-        { name: "Punkleton", combo: "Bowgart + T-Rox" },
-        { name: "Yool", combo: "Thumpies + Congle" },
-        { name: "Schmoochle", combo: "Riff + Tweedle" },
-        { name: "Blabbit", combo: "Spunge + Scups" },
-        { name: "Hoola", combo: "PomPom + Pango" },
-        { name: "Gobbleygourd", combo: "Glowl + Kayna / Punkleton + Yool" },
-        { name: "Clavavera", combo: "Withur + Clackula / Punkleton + Schmoochle" },
-        { name: "Viveine", combo: "Shugabush + Oaktopus / Punkleton + Blabbit" },
-        { name: "Jam Boree", combo: "Punkleton + Hoola" },
-        { name: "Carillong", combo: "Mushaboom + Roarick / Yool + Schmoochle" },
-        { name: "Whiz-bang", combo: "Blow't + Spytrap / Yool + Blabbit" },
-        { name: "Monculus", combo: "Nebulob + Jeeode / Yool + Hoola" },
-        { name: "Ffidyll", combo: "Pladdie + Floot Fly / Schmoochle + Blabbit" },
-        { name: "Boo'qwurm", combo: "Periscorp + Bonkers / Schmoochle + Hoola" },
-        { name: "Spurrit", combo: "Wynq + Maw / Blabbit + Hoola" },
-        { name: "G'joob", combo: "Pummel + T-Rox" },
-        { name: "Strombonin", combo: "Spunge + Bowgart" },
-        { name: "Yawstrich", combo: "Scups + T-Rox" },
-        { name: "Anglow", combo: "Scups + Pummel" },
-        { name: "Hyehehe", combo: "Thumpies + PomPom" },
-        { name: "Buzzinga", combo: "Reedling + Barrb" },
-        { name: "Cherubble", combo: "Congle + Woolabee" },
-        { name: "Bleatnik", combo: "Cataliszt + G'joob" },
-        { name: "Cranchee", combo: "Cataliszt + Strombonin" },
-        { name: "Sporerow", combo: "Cataliszt + Yawstrich" },
-        { name: "Pinghound", combo: "Cataliszt + Anglow" },
-        { name: "Wheezel", combo: "Cataliszt + Hyehehe" },
-        { name: "Knurv", combo: "Cataliszt + Buzzinga" },
-        { name: "shLep", combo: "Cataliszt + Cherubble" },
-        { name: "Hairionette", combo: "Gloptic + Rooba" },
-        { name: "Owlesque", combo: "Pladdie + Bridg-it" },
-        { name: "Arcorina", combo: "Plinkajou + Withur" },
-        { name: "Shhimmer", combo: "Blow't + Spytrap" },
-        { name: "Scallyrags", combo: "Hairionette + Owlesque" },
-        { name: "eRmA gUrDy", combo: "Hairionette + Shhimmer" },
-        { name: "Dakktyl", combo: "Owlesque + Arcorina" },
-        { name: "Jerm", combo: "Dakktyl + Hairionette" },
-        { name: "Illost", combo: "Dakktyl + Shhimmer" },
-        { name: "Shugabush", combo: "Clamble + Bowgart" },
-        { name: "Shugabass", combo: "Shugabush + Potbelly" },
-        { name: "Shugitar", combo: "Shugabush + PomPom" },
-        { name: "Shugajo", combo: "Shugabush + Oaktopus" },
-        { name: "Shugarock", combo: "Shugabush + Mammott" },
-        { name: "Shugabuzz", combo: "Shugabush + Quibble" },
-        { name: "Shugabeats", combo: "Shugabush + Furcorn" },
-        { name: "Shugavox", combo: "Shugabush + Deedge" },
-        { name: "bbli$zard", combo: "Thumpies + Congle" },
+    { name: "Dandidoo", combo: "Tweedle + Potbelly", img: "images/dandidoo.png", standard: 480 },
+    { name: "Cybop", combo: "Tweedle + Noggin", img: "images/cybop.png", standard: 480 },
+    { name: "Quibble", combo: "Tweedle + Toe Jammer", img: "images/quibble.png", standard: 480 },
+    { name: "Pango", combo: "Tweedle + Mammott", img: "images/pango.png", standard: 480 },
+    { name: "Shrubb", combo: "Potbelly + Mammott", img: "images/shrubb.png", standard: 480 },
+    { name: "Oaktopus", combo: "Potbelly + Toe Jammer", img: "images/oaktopus.png", standard: 480 },
+    { name: "Furcorn", combo: "Potbelly + Mammott", img: "images/furcorn.png", standard: 480 },
+    { name: "Fwog", combo: "Noggin + Toe Jammer", img: "images/fwog.png", standard: 30 },
+    { name: "Drumpler", combo: "Noggin + Mammott", img: "images/drumpler.png", standard: 30 },
+    { name: "Maw", combo: "Toe Jammer + Mammott", img: "images/maw.png", standard: 30 },
+    { name: "Reedling", combo: "Dandidoo + Noggin", img: "images/reedling.png", standard: 720 },
+    { name: "Spunge", combo: "Dandidoo + Toe Jammer", img: "images/spunge.png", standard: 720 },
+    { name: "Thumpies", combo: "Dandidoo + Mammott", img: "images/thumpies.png", standard: 720 },
+    { name: "Scups", combo: "Noggin + Quibble", img: "images/scups.png", standard: 720 },
+    { name: "PomPom", combo: "Pango + Noggin", img: "images/pompom.png", standard: 720 },
+    { name: "Congle", combo: "Pango + Toe Jammer", img: "images/congle.png", standard: 720 },
+    { name: "Pummel", combo: "Oaktopus + Noggin", img: "images/pummel.png", standard: 720 },
+    { name: "Clamble", combo: "Furcorn + Noggin", img: "images/clamble.png", standard: 720 },
+    { name: "Bowgart", combo: "Furcorn + Toe Jammer", img: "images/bowgart.png", standard: 720 },
+    { name: "T-Rox", combo: "Maw + Noggin", img: "images/t-rox.png", standard: 480 },
+    { name: "Shellbeat", combo: "Spunge + Noggin", img: "images/shellbeat.png", standard: 1440 },
+    { name: "Quarrister", combo: "Thumpies + Noggin", img: "images/quarrister.png", standard: 1440 },
+    { name: "Deedge", combo: "Thumpies + Toe Jammer", img: "images/deedge.png", standard: 1440 },
+    { name: "Riff", combo: "Congle + Noggin", img: "images/riff.png", standard: 1440 },
+    { name: "Entbrat", combo: "Bowgart + Noggin", img: "images/entbrat.png", standard: 1440 },
+    { name: "Tring", combo: "Barrb + Noggin", img: "images/tring.png", standard: 1456 },
+    { name: "Sneyser", combo: "Woolabee + Toe Jammer", img: "images/sneyser.png", standard: 1456 },
+    { name: "Glowl", combo: "Kayna + Tweedle", img: "images/glowl.png", standard: 600 },
+    { name: "Flowah", combo: "Kayna + Potbelly", img: "images/flowah.png", standard: 600 },
+    { name: "Stogg", combo: "Kayna + Noggin", img: "images/stogg.png", standard: 600 },
+    { name: "Phangler", combo: "Kayna + Toe Jammer", img: "images/phangler.png", standard: 600 },
+    { name: "Boskus", combo: "Kayna + Mammott", img: "images/boskus.png", standard: 600 },
+    { name: "Barrb", combo: "Glowl + Potbelly", img: "images/barrb.png", standard: 1200 },
+    { name: "Floogull", combo: "Glowl + Noggin", img: "images/floogull.png", standard: 1200 },
+    { name: "Whaddle", combo: "Glowl + Toe Jammer", img: "images/whaddle.png", standard: 1200 },
+    { name: "Woolabee", combo: "Glowl + Mammott", img: "images/woolabee.png", standard: 1200 },
+    { name: "Repatillo", combo: "Flowah + Noggin", img: "images/repatillo.png", standard: 1200 },
+    { name: "Rootitoot", combo: "Flowah + Toe Jammer", img: "images/rootitoot.png", standard: 1200 },
+    { name: "Sooza", combo: "Flowah + Mammott", img: "images/sooza.png", standard: 1200 },
+    { name: "Thrumble", combo: "Phangler + Noggin", img: "images/thrumble.png", standard: 1200 },
+    { name: "Ziggurab", combo: "Boskus + Noggin", img: "images/ziggurab.png", standard: 1200 },
+    { name: "Wynq", combo: "Boskus + Toe Jammer", img: "images/wynq.png", standard: 1200 },
+
+    { name: "Gloptic", combo: "Rooba + Toe Jammer", img: "images/gloptic.png", standard: 1448 },
+    { name: "Blow't", combo: "TooToo + Mammott", img: "images/blowt.png", standard: 1448 },
+    { name: "Plinkajou", combo: "Banjaw + Noggin", img: "images/plinkajou.png", standard: 1448 },
+    { name: "Pladdie", combo: "Clavi Gnat + Noggin", img: "images/pladdie.png", standard: 1448 },
+    { name: "Enchantling", combo: "Larvaluss + Fluoress", img: "images/enchantling.png", standard: 3000 },
+
+    { name: "Bonkers", combo: "Potbelly + Theremind", img: "images/bonkers.png", standard: 540 },
+    { name: "Gob", combo: "Potbelly + Fluoress", img: "images/gob.png", standard: 540 },
+    { name: "Peckidna", combo: "Noggin + Clackula", img: "images/peckidna.png", standard: 540 },
+    { name: "HippityHop", combo: "Noggin + Floot Fly", img: "images/hippityhop.png", standard: 540 },
+    { name: "Poppette", combo: "Toe Jammer + Theremind", img: "images/poppette.png", standard: 540 },
+    { name: "Denchuhs", combo: "Toe Jammer + Clackula", img: "images/denchuhs.png", standard: 540 },
+    { name: "Bulbo", combo: "Mammott + Fluoress", img: "images/bulbo.png", standard: 540 },
+    { name: "Squot", combo: "Mammott + Floot Fly", img: "images/squot.png", standard: 540 },
+    { name: "Yuggler", combo: "Kayna + Theremind", img: "images/yuggler.png", standard: 540 },
+    { name: "Hawlo", combo: "Kayna + Clackula", img: "images/hawlo.png", standard: 540 },
+    { name: "Pluckbill", combo: "Kayna + Fluoress", img: "images/pluckbill.png", standard: 540 },
+    { name: "Wimmzies", combo: "Kayna + Floot Fly", img: "images/wimmzies.png", standard: 540 },
+    { name: "Xyster", combo: "Theremind + Clackula", img: "images/xyster.png", standard: 1200 },
+    { name: "Cahoot", combo: "Theremind + Fluoress", img: "images/cahoot.png", standard: 1200 },
+    { name: "Déjà-Jin", combo: "Theremind + Floot Fly", img: "images/deja-jin.png", standard: 1200 },
+    { name: "Roarick", combo: "Clackula + Fluoress", img: "images/roarick.png", standard: 1200 },
+    { name: "Osstax", combo: "Clackula + Floot Fly", img: "images/osstax.png", standard: 1200 },
+    { name: "Knucklehead", combo: "Fluoress + Floot Fly", img: "images/knucklehead.png", standard: 1200 },
+
+    { name: "Tapricorn", combo: "Bonkers + Toe Jammer", img: "images/tapricorn.png", standard: 960 },
+    { name: "Spytrap", combo: "Gob + Mammott", img: "images/spytrap.png", standard: 960 },
+    { name: "Rooba", combo: "Yuggler + Potbelly", img: "images/rooba.png", standard: 960 },
+    { name: "TooToo", combo: "Pluckbill + Potbelly", img: "images/tootoo.png", standard: 960 },
+    { name: "Withur", combo: "Denchuhs + Noggin", img: "images/withur.png", standard: 960 },
+    { name: "Cantorell", combo: "Squot + Noggin", img: "images/cantorell.png", standard: 960 },
+    { name: "Uuduk", combo: "Hawlo + Noggin", img: "images/uuduk.png", standard: 960 },
+    { name: "Bridg-it", combo: "Wimmzies + Noggin", img: "images/bridg-it.png", standard: 960 },
+    { name: "Periscorp", combo: "Yuggler + Toe Jammer", img: "images/periscorp.png", standard: 960 },
+    { name: "Banjaw", combo: "Hawlo + Toe Jammer", img: "images/banjaw.png", standard: 960 },
+    { name: "Fiddlement", combo: "Pluckbill + Mammott", img: "images/fiddlement.png", standard: 960 },
+    { name: "Clavi Gnat", combo: "Wimmzies + Mammott", img: "images/clavi-gnat.png", standard: 960 },
+    { name: "G'day", combo: "Xyster + Fluoress", img: "images/gday.png", standard: 1446 },
+    { name: "Larvaluss", combo: "Osstax + Theremind", img: "images/larvaluss.png", standard: 1446 },
+    { name: "Frondley", combo: "Déjà-Jin + Fluoress", img: "images/frondley.png", standard: 1446 },
+    { name: "Mushaboom", combo: "Osstax + Fluoress", img: "images/mushaboom.png", standard: 1446 },
+
+    { name: "Ghazt", combo: "Entbrat + T-Rox", img: "images/ghazt.png", standard: 1452 },
+    { name: "Grumpyre", combo: "Deedge + Congle", img: "images/grumpyre.png", standard: 1452 },
+    { name: "Reebro", combo: "Riff + T-Rox", img: "images/reebro.png", standard: 1452 },
+    { name: "Jeeode", combo: "Shellbeat + Reedling", img: "images/jeeode.png", standard: 1452 },
+    { name: "Humbug", combo: "Quarrister + Reedling", img: "images/humbug.png", standard: 1452 },
+
+    { name: "Whisp", combo: "Ghazt + Grumpyre", img: "images/whisp.png", standard: 2520 },
+    { name: "Nebulob", combo: "Ghazt + Reebro", img: "images/nebulob.png", standard: 2520 },
+    { name: "Sox", combo: "Ghazt + Jeeode", img: "images/sox.png", standard: 2520 },
+    { name: "Jellbilly", combo: "Ghazt + Humbug", img: "images/jellbilly.png", standard: 2520 },
+    { name: "Arackulele", combo: "Grumpyre + Reebro", img: "images/arackulele.png", standard: 2520 },
+    { name: "Boodoo", combo: "Grumpyre + Jeeode", img: "images/boodoo.png", standard: 2520 },
+    { name: "Kazilleon", combo: "Grumpyre + Humbug", img: "images/kazilleon.png", standard: 2520 },
+    { name: "Bellowfish", combo: "Reebro + Jeeode", img: "images/bellowfish.png", standard: 2520 },
+    { name: "Dragong", combo: "Reebro + Humbug", img: "images/dragong.png", standard: 2520 },
+    { name: "Fung Pray", combo: "Jeeode + Humbug", img: "images/fung-pray.png", standard: 2520 },
+
+    { name: "Punkleton", combo: "Bowgart + T-Rox", img: "images/punkleton.png", standard: 1080 },
+    { name: "Yool", combo: "Thumpies + Congle", img: "images/yool.png", standard: 2160 },
+    { name: "Schmoochle", combo: "Riff + Tweedle", img: "images/schmoochle.png", standard: 1866 },
+    { name: "Blabbit", combo: "Spunge + Scups", img: "images/blabbit.png", standard: 1140 },
+    { name: "Hoola", combo: "PomPom + Pango", img: "images/hoola.png", standard: 1500 },
+
+    { name: "Gobbleygourd", combo: "Glowl + Kayna / Punkleton + Yool", img: "images/gobbleygourd.png", standard: 1260 },
+    { name: "Clavavera", combo: "Withur + Clackula / Punkleton + Schmoochle", img: "images/clavavera.png", standard: 1331 },
+    { name: "Viveine", combo: "Shugabush + Oaktopus / Punkleton + Blabbit", img: "images/viveine.png", standard: 1565 },
+    { name: "Jam Boree", combo: "Punkleton + Hoola", img: "images/jam-boree.png", standard: 2424 },
+    { name: "Carillong", combo: "Mushaboom + Roarick / Yool + Schmoochle", img: "images/carillong.png", standard: 1629 },
+    { name: "Whiz-bang", combo: "Blow't + Spytrap / Yool + Blabbit", img: "images/whiz-bang.png", standard: 1686 },
+    { name: "Monculus", combo: "Nebulob + Jeeode / Yool + Hoola", img: "images/monculus.png", standard: 1204 },
+    { name: "Ffidyll", combo: "Pladdie + Floot Fly / Schmoochle + Blabbit", img: "images/ffidyll.png", standard: 1364 },
+    { name: "Boo'qwurm", combo: "Periscorp + Bonkers / Schmoochle + Hoola", img: "images/booqwurm.png", standard: 1446 },
+    { name: "Spurrit", combo: "Wynq + Maw / Blabbit + Hoola", img: "images/spurrit.png", standard: 1218 },
+
+    { name: "G'joob", combo: "Pummel + T-Rox", img: "images/gjoob.png", standard: 1080 },
+    { name: "Strombonin", combo: "Spunge + Bowgart", img: "images/strombonin.png", standard: 1380 },
+    { name: "Yawstrich", combo: "Scups + T-Rox", img: "images/yawstrich.png", standard: 2100 },
+    { name: "Anglow", combo: "Scups + Pummel", img: "images/anglow.png", standard: 1980 },
+    { name: "Hyehehe", combo: "Thumpies + PomPom", img: "images/hyehehe.png", standard: 1680 },
+    { name: "Buzzinga", combo: "Reedling + Barrb", img: "images/buzzinga.png", standard: 1380 },
+    { name: "Cherubble", combo: "Congle + Woolabee", img: "images/cherubble.png", standard: 1080 },
+
+    { name: "Bleatnik", combo: "Cataliszt + G'joob", img: "images/bleatnik.png", standard: 1980 },
+    { name: "Cranchee", combo: "Cataliszt + Strombonin", img: "images/cranchee.png", standard: 1920 },
+    { name: "Sporerow", combo: "Cataliszt + Yawstrich", img: "images/sporerow.png", standard: 2220 },
+    { name: "Pinghound", combo: "Cataliszt + Anglow", img: "images/pinghound.png", standard: 2520 },
+    { name: "Wheezel", combo: "Cataliszt + Hyehehe", img: "images/wheezel.png", standard: 2220 },
+    { name: "Knurv", combo: "Cataliszt + Buzzinga", img: "images/knurv.png", standard: 1920 },
+    { name: "shLep", combo: "Cataliszt + Cherubble", img: "images/shlep.png", standard: 1620 },
+
+    { name: "Hairionette", combo: "Gloptic + Rooba", img: "images/hairionette.png", standard: 1920 },
+    { name: "Owlesque", combo: "Pladdie + Bridg-it", img: "images/owlesque.png", standard: 2040 },
+    { name: "Arcorina", combo: "Plinkajou + Withur", img: "images/arcorina.png", standard: 2160 },
+    { name: "Shhimmer", combo: "Blow't + Spytrap", img: "images/shhimmer.png", standard: 1800 },
+    { name: "Scallyrags", combo: "Hairionette + Owlesque", img: "images/scallyrags.png", standard: 2700 },
+    { name: "eRmA gUrDy", combo: "Hairionette + Shhimmer", img: "images/erma-gurdy.png", standard: 2700 },
+    { name: "Dakktyl", combo: "Owlesque + Arcorina", img: "images/dakktyl.png", standard: 2700 },
+    { name: "Jerm", combo: "Dakktyl + Hairionette", img: "images/jerm.png", standard: 3360 },
+    { name: "Illoost", combo: "Dakktyl + Shhimmer", img: "images/illost.png", standard: 3360 },
+
+    { name: "Shugabush", combo: "Clamble + Bowgart", img: "images/shugabush.png", standard: 2100 },
+    { name: "Shugabass", combo: "Shugabush + Potbelly", img: "images/shugabass.png", standard: 2100 },
+    { name: "Shugitar", combo: "Shugabush + PomPom", img: "images/shugitar.png", standard: 2100 },
+    { name: "Shugajo", combo: "Shugabush + Oaktopus", img: "images/shugajo.png", standard: 2100 },
+    { name: "Shugarock", combo: "Shugabush + Mammott", img: "images/shugarock.png", standard: 2100 },
+    { name: "Shugabuzz", combo: "Shugabush + Quibble", img: "images/shugabuzz.png", standard: 2100 },
+    { name: "Shugabeats", combo: "Shugabush + Furcorn", img: "images/shugabeats.png", standard: 2100 },
+    { name: "Shugavox", combo: "Shugabush + Deedge", img: "images/shugavox.png", standard: 2100 },
+    { name: "bbli$zard", combo: "Thumpies + Congle", img: "images/bblizard.png", standard: 2100 },
   ];
 
   function normalize(s) {
@@ -405,22 +423,50 @@
     return ranked;
   }
 
+  function formatTime(totalMinutes) {
+    if (totalMinutes === null || totalMinutes === undefined) return "—"; // placeholder
+
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = totalMinutes % 60;
+
+    const parts = [];
+    if (days) parts.push(`${days} d`);
+    if (hours) parts.push(`${hours} hr`);
+    if (minutes) parts.push(`${minutes} min`);
+
+    return parts.length ? parts.join(" ") : "0 min";
+  }
+  function calculateEnhanced(standardMinutes) {
+    if (standardMinutes === null || standardMinutes === undefined) return null;
+    // Enhanced structures are 25% faster
+    return Math.floor(standardMinutes * 0.75);
+  }
+
+
   function showResult(queryName) {
     const q = normalize(queryName);
+
     let exact = DATA.find(x => normalize(x.name) === q);
-    if (!exact) {
-      exact = getBestMatches(queryName, 1)[0] || null;
-    }
+    if (!exact) exact = getBestMatches(queryName, 1)[0] || null;
+
     outEl.style.display = "block";
+
     if (!exact) {
       outEl.textContent = "No monster found. Try a different spelling.";
       return;
     }
+
     outEl.innerHTML = `
-      <strong style="font-size:18px;">${exact.name}</strong>
-      <div style="margin-top:10px;">${exact.combo}</div>
+      <div class="monster-name">${exact.name}</div>
+
+      <div class="info-line">🧬 <strong>Combo:</strong> ${exact.combo || "—"}</div>
+      <div class="info-line">🩷 <strong>Standard:</strong> ${formatTime(exact.standard)}</div>
+      <div class="info-line">💛 <strong>Enhanced:</strong> ${formatTime(calculateEnhanced(exact.standard))}</div>
+
     `;
   }
+
 
   qEl.addEventListener("input", () => {
     currentSuggestions = getBestMatches(qEl.value, 8);
