@@ -407,6 +407,7 @@
     if (!item) return;
     qEl.value = item.name;
     sugEl.style.display = "none";
+    qEl.blur();          // closes mobile keyboard
     showResult(item.name);
   }
 
@@ -445,12 +446,15 @@
 
 
   function showResult(queryName) {
+    qEl.blur(); // closes mobile keyboard
+
     const q = normalize(queryName);
 
     let exact = DATA.find(x => normalize(x.name) === q);
     if (!exact) exact = getBestMatches(queryName, 1)[0] || null;
 
     outEl.style.display = "block";
+    outEl.scrollIntoView({ behavior: "smooth", block: "start" }); // smooth scroll
 
     if (!exact) {
       outEl.textContent = "No monster found. Try a different spelling.";
